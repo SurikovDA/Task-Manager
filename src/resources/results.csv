@@ -1,0 +1,6 @@
+id,type,name,status,description,epic
+1,TASK,Test,NEW,pflfxf
+7,EPIC,Важный эпик 2,NEW,null
+8,SUBTASK,Задача1,NEW,null,7
+
+1,7
