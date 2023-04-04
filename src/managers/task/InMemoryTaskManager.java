@@ -36,11 +36,9 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
         return new ArrayList<>(prioritizedTasks);
     }
 
-    // добавление таска в список + проверка нет ли пересечения
+    // добавление таска в отсортированный список
     private void addToPrioritizedTasks(Task task) {
-        if (!checkingIntersection(task)) {
-            prioritizedTasks.add(task);
-        }
+        prioritizedTasks.add(task);
     }
 
     @Override // сравнение тасков по getStartTime()
@@ -158,6 +156,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
     public Task updateTask(int id, Task task) {
         //Находим объект в словаре по его id
         if (tasks.containsKey(id)) {
+            //Удаление из отсортированного списка
+            prioritizedTasks.removeIf(taskDelete -> taskDelete.getId() == id);
             //Проверка на пересечение времени
             if (checkingIntersection(task)) {
                 return null;
@@ -184,6 +184,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
     @Override
     public Subtask updateSubtaskById(int id, Subtask subtask) {
         if (subtasks.containsKey(id)) {
+            //Удаление из отсортированного списка
+            prioritizedTasks.removeIf(taskDelete -> taskDelete.getId() == id);
             //Проверка на пересечение времени
             if (checkingIntersection(subtask)) {
                 return null;
