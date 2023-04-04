@@ -8,7 +8,6 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 abstract public class TaskManagerTest<T extends TaskManager> {
     private final T object;

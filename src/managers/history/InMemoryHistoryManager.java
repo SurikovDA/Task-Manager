@@ -17,11 +17,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     //для добавления нового просмотра задачи
     @Override
     public void add(Task task) {
+        Node node = customLinkedList.linkLast(task);
         if (task != null) {
             if (tasksHistory.containsKey(task.getId())) {
                 customLinkedList.removeNode(tasksHistory.get(task.getId()));
             }
-            Node node = customLinkedList.linkLast(task);
             tasksHistory.put(task.getId(), node);
         }
     }
