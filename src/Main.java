@@ -6,6 +6,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 
+
 /**
  * Теститорование программы
  */
@@ -13,7 +14,7 @@ import tasks.Task;
 public class Main {
     public static void main(String[] args) {
 
-       //Создание объекта менеджера:
+        //Создание объекта менеджера:
         TaskManager manager = Managers.getDefault();
         //Создаем две задачи
         System.out.println("Создание 2х задач: ");
@@ -22,7 +23,6 @@ public class Main {
         manager.createNewTask(task1);
         manager.createNewTask(task2);
         System.out.println("\n");
-
         //создаем первый эпик
         System.out.println("Создаем первый эпик: ");
         Epic removal = new Epic("Переезд");
@@ -51,6 +51,8 @@ public class Main {
         //Создаем подзадачу для второго эпика
         System.out.println("Создаем подзадачу для 2го эпика: ");
         Subtask subtask1Epic2 = new Subtask("Задача1");
+        subtask2Epic1.setDuration(120);
+        subtask2Epic1.setStartTime("30.03.2023|11:40");
         System.out.println("\n");
 
         //Добавляем подзадачу в список подзадач 2 эпика
@@ -111,16 +113,23 @@ public class Main {
 
         /*Удаляем эпик с тремя подзадачами и убеждаемся,
                  что удалился как сам эпик, так и всего его подзадачи*/
-        manager.deleteEpicById(removal.getId());
+        //manager.deleteEpicById(removal.getId());
         System.out.println(manager.findTaskById(removal.getId()));
         System.out.println(manager.findSubtaskById(subtask1Epic1.getId()));
         System.out.println(manager.findSubtaskById(subtask2Epic1.getId()));
+        System.out.println("\n");
+        //Распечатать по приоритету
+        System.out.println("Печать по приоритету:");
+        for (Task task : manager.getPrioritizedTasks()) {
+            System.out.println(task);
+        }
         System.out.println("\n");
 
         //Удаляем все задачи
         manager.deleteAllTasks();
         System.out.println(manager.findTaskById(task1.getId()));
         System.out.println("\n");
+
 
     }
 }

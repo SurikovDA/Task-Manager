@@ -87,13 +87,17 @@ class CustomLinkedList {
 
     //Собрать задачи в ArrayList
     public List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<>();
-        Node element = first;
-        while (element != null) {
-            tasks.add(element.data);
-            element = element.next;
+        if(first != null) {
+            List<Task> tasks = new ArrayList<>();
+            Node element = first;
+            while (element != null) {
+                tasks.add(element.data);
+                element = element.next;
+            }
+            return tasks;
+        } else {
+            return null;
         }
-        return tasks;
     }
 }
 

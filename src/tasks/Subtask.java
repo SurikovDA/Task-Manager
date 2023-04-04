@@ -33,6 +33,7 @@
             this.epic = epic;
         }
 
+
         // Обновление подзадачи, когда не надо обновлять idEpic
         public Subtask(String name, String descriptionTask, Status status) {
             super(name, descriptionTask, status);

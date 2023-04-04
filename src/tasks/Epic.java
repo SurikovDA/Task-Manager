@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +15,8 @@ import java.util.Objects;
 public class Epic extends Task {
     //Хранение в списке всех подзадач эпика
     private final List<Subtask> subtasks = new ArrayList<>();
+    //дата и время окончания эпика
+    private LocalDateTime endTime;
 
     //Создание с id
     public Epic(Integer id, String name, String descriptionTask, Status status) {
@@ -98,5 +102,64 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), subtasks);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return findLateEndTimeSubtasks();
+    }
+
+    //расчет продолжительности эпика
+    public void updateStartTimeAndDuration() {
+        //Обработка продолжительности задачи,
+        //Продолжительность эпика - сумма продолжительности всех его подзадач.
+        duration = null;
+        startTime = null;
+        if (!subtasks.isEmpty()) {
+            for (Subtask subtask : subtasks) {
+                //Если у подзадачи есть продолжительность с ней можно работать
+                if (subtask.getDuration() != null) {
+                    if (duration == null) {
+                        duration = subtask.getDuration();
+                    } else {
+                        duration = duration.plus(subtask.getDuration());
+                    }
+                }
+            }
+            //инициализация старта по времени для эпика
+            startTime = findEarlyStartTimeSubtasks();
+        }
+    }
+    //расчет старта эпика
+    private LocalDateTime findEarlyStartTimeSubtasks() {
+        LocalDateTime earlyStartTime = subtasks.get(0).getStartTime();
+        if (subtasks.size() > 1) {
+            for (int i = 1; i < subtasks.size(); i++) {
+                if (earlyStartTime == null)
+                    earlyStartTime = subtasks.get(i).getStartTime();
+                else if (subtasks.get(i).getStartTime() != null
+                        && subtasks.get(i).getStartTime().isBefore(earlyStartTime)
+                ) {
+                    earlyStartTime = subtasks.get(i).getStartTime();
+                }
+            }
+        }
+        return earlyStartTime;
+    }
+    //расчет времени конца эпика
+    private LocalDateTime findLateEndTimeSubtasks() {
+        LocalDateTime lateEndTime = subtasks.get(0).getEndTime();
+        if (subtasks.size() > 1) {
+            for (int i = 1; i < subtasks.size(); i++) {
+                if (lateEndTime == null)
+                    lateEndTime = subtasks.get(i).getEndTime();
+                else if (subtasks.get(i).getEndTime() != null
+                        && subtasks.get(i).getEndTime().isAfter(lateEndTime)
+                ) {
+                    lateEndTime = subtasks.get(i).getEndTime();
+                }
+            }
+        }
+        return lateEndTime;
     }
 }

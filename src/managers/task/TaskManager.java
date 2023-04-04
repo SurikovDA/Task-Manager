@@ -13,64 +13,68 @@ public interface TaskManager {
      * Интерфейс InMemoryTaskManager
      */
 
-        //Получение списка всех задач
-        List<Task> getAllTasks();
+    //Получение списка всех задач
+    List<Task> getAllTasks();
 
-        //Получение списка всех эпиков.
-         List<Epic> getAllEpics();
-
-
-        //Получение списка всех подзадач определённого эпика.
-        List<Task> getAllSubtasks(int idEpic);
+    //Получение списка всех эпиков.
+    List<Epic> getAllEpics();
 
 
-        //Получение задачи любого типа по идентификатору.
-        Task findTaskById(int id);
+    //Получение списка всех подзадач определённого эпика.
+    List<Task> getAllSubtasks(int idEpic);
 
 
-         Subtask findSubtaskById(int id);
+    //Получение задачи любого типа по идентификатору.
+    Task findTaskById(int id);
 
 
-         Epic findEpicById(int id);
+    Subtask findSubtaskById(int id);
 
 
-        //Добавление новой задачи, эпика и подзадачи. Сам объект должен передаваться в качестве параметра.
-         void createNewTask(Task task);
+    Epic findEpicById(int id);
 
-        //Создание новой подзадачи
-        void createNewSubtask(Subtask subtask, Epic epic);
 
-        void createNewEpic(Epic epic);
+    //Добавление новой задачи, эпика и подзадачи. Сам объект должен передаваться в качестве параметра.
+    void createNewTask(Task task);
 
-        //Обновление задачи любого типа по идентификатору. Новая версия объекта передаётся в виде параметра:
+    //Создание новой подзадачи
+    void createNewSubtask(Subtask subtask, Epic epic);
 
-        //Обновление задачи:
-        Task updateTask(Task task);
+    void createNewEpic(Epic epic);
 
-        //Обновление подзадачи
-        Subtask updateSubtaskById(int id, Subtask subtask);
+    //Обновление задачи любого типа по идентификатору. Новая версия объекта передаётся в виде параметра:
 
-        //Обновление эпика
-         Epic updateEpicById(int id, Epic epic);
+    //Обновление задачи:
+    Task updateTask(int id, Task task);
 
-        //Удаление ранее добавленных задач — всех и по идентификатору.
-        void deleteTaskById(int id);
-        //Удаление подзадачи эпика по id
-        void deleteSubtaskById(int id);
+    //Обновление подзадачи
+    Subtask updateSubtaskById(int id, Subtask subtask);
 
-        //Удаление эпика по id
-         void deleteEpicById(int id);
+    //Обновление эпика
+    Epic updateEpicById(int id, Epic epic);
 
-        //Удалить все задачи
-         void deleteAllTasks();
+    //Удаление ранее добавленных задач — всех и по идентификатору.
+    void deleteTaskById(int id);
 
-        //Удаление подзадач
-        void deleteAllSubtasks();
+    //Удаление подзадачи эпика по id
+    void deleteSubtaskById(int id);
 
-        //Удалить все эпики
-         void deleteAllEpics() ;
+    //Удаление эпика по id
+    void deleteEpicById(int id);
 
-         //Последние просмотренные пользователем задачи
-         List<Task> getHistory();
-    }
+    //Удалить все задачи
+    void deleteAllTasks();
+
+    //Удаление подзадач
+    void deleteAllSubtasks();
+
+    //Удалить все эпики
+    void deleteAllEpics();
+
+    //Последние просмотренные пользователем задачи
+    List<Task> getHistory();
+
+    //возвращающий список задач и подзадач в отсортированном порядке по приоритету - то есть по startTime
+    List<Task> getPrioritizedTasks();
+}
 

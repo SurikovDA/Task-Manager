@@ -1,6 +1,10 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
 import static tasks.Status.NEW;
 
 /**
@@ -14,10 +18,67 @@ public class Task {
      * все конструкторы, геттеры, сеттеры,
      * equals, hashCode(), toString().
      */
-    protected Integer id = 0; //Идентификационный номер задачи
-    protected String name;  //Название задачи
-    protected String descriptionTask; //Описание задачи
-    protected Status status; //Статус
+    //Идентификационный номер задачи
+    protected Integer id = 0;
+    //Название задачи
+    protected String name;
+    //Описание задачи
+    protected String descriptionTask;
+    //Статус
+    protected Status status;
+    //продолжительность задачи, оценка того, сколько времени она займёт
+    protected Duration duration;
+    //дата, когда предполагается приступить к выполнению задачи
+    protected LocalDateTime startTime;
+    //формат даты и времени для работы
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy|HH:mm");
+
+    //Работа со временем:
+    //установка продолжительности числом
+    public void setDuration(long minutes) {
+        this.duration = Duration.ofMinutes(minutes);
+    }
+
+    //Установка времени начала задачи строкой
+    public void setStartTime(String startTime) {
+        this.startTime = LocalDateTime.parse(startTime, formatter);
+    }
+
+    //Установка времени начала задачи
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    //Время завершения задачи
+    public LocalDateTime getEndTime() {
+        if (duration == null)
+            return null;
+        if (startTime != null) {
+            return startTime.plus(duration);
+        } else {
+            return null;
+        }
+    }
+
+    //Получение продолжительности
+    public Duration getDuration() {
+        return duration;
+    }
+
+    //Обнуление времени
+    public void resetStartTimeAndDuration() {
+        startTime = null;
+        duration = null;
+    }
+
 
     //Конструкторы:
     //Только название задачи
