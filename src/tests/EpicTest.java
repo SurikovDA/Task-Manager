@@ -62,7 +62,7 @@ public class EpicTest {
 
     @Test
     public void shouldAllSubtasksWithInProgressStatus() {
-        //Все подзадачи со статусом IN_PROGRESS
+        //Все подзадачи со статусом InProgress
         epic.getSubtasks().add(subtask);
         epic.getSubtasks().add(subtask1);
 
@@ -70,15 +70,11 @@ public class EpicTest {
         subtask1.setEpic(epic);
 
         subtask.setStatus(Status.IN_PROGRESS);
-        boolean beINProgress = false;
-
-        for (Subtask epicSubtask : epic.getSubtasks()) {
-            if (epicSubtask.getStatus().equals(Status.IN_PROGRESS)) {
-                beINProgress = true;
-                break;
-            }
-        }
-        assertTrue(beINProgress);
+        subtask1.setStatus(Status.DONE);
+        //проверка статусов у Subtasks Epic'ов
+        epic.setStatusEpic();
+        //проверка
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 
     @Test
@@ -90,17 +86,11 @@ public class EpicTest {
         subtask.setEpic(epic);
         subtask1.setEpic(epic);
 
-        subtask.setStatus(Status.DONE);
-        boolean beNew = false;
-        boolean beDone = false;
-
-        for (Subtask epicSubtask : epic.getSubtasks()) {
-            if (epicSubtask.getStatus().equals(Status.NEW))
-                beNew = true;
-            else if (epicSubtask.getStatus().equals(Status.DONE))
-                beDone = true;
-        }
-
-        assertTrue(beNew && beDone);
+        subtask.setStatus(Status.NEW);
+        subtask1.setStatus(Status.DONE);
+        //проверка статусов у Subtasks Epic'ов
+        epic.setStatusEpic();
+        //проверка
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 }
