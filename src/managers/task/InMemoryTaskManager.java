@@ -35,15 +35,17 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
+
     // добавление таска в список + проверка нет ли пересечения
     private void addToPrioritizedTasks(Task task) {
-        if(!checkingIntersection(task)) {
+        if (!checkingIntersection(task)) {
             prioritizedTasks.add(task);
         }
     }
+
     @Override // сравнение тасков по getStartTime()
     public int compare(Task o1, Task o2) {
-        if(o1.getStartTime() != null && o1.getStartTime() != null) {
+        if (o1.getStartTime() != null && o1.getStartTime() != null) {
             return o1.getStartTime().compareTo(o2.getStartTime());
         }
         return 1;
@@ -336,10 +338,28 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
                     !task.equals(prioritizedTask)
                             && task.getStartTime() != null
                             && prioritizedTask.getEndTime() != null
-                            && (task.getStartTime().equals(prioritizedTask.getEndTime())
+                            && ((prioritizedTask.getStartTime() == task.getStartTime())
+                            || (prioritizedTask.getStartTime() == task.getEndTime())
+                            || (prioritizedTask.getStartTime().isAfter(task.getStartTime())
+                            && prioritizedTask.getStartTime().isBefore(task.getEndTime()))
+                            || (prioritizedTask.getEndTime().isAfter(task.getStartTime())
+                            && prioritizedTask.getEndTime().isBefore(task.getEndTime()))
+                            || (task.getStartTime().isAfter(prioritizedTask.getStartTime())
+                            && task.getStartTime().isBefore(prioritizedTask.getEndTime()))
+                            || (task.getEndTime().isAfter(prioritizedTask.getStartTime())
+                            && task.getEndTime().isBefore(prioritizedTask.getEndTime()))
+                    )
+            )
+            /*(
+                    !task.equals(prioritizedTask)
+                            && task.getStartTime() != null
+                            && prioritizedTask.getEndTime() != null
+                            && ( (task.getStartTime().equals(prioritizedTask.getEndTime())
                             || task.getStartTime().isBefore(prioritizedTask.getEndTime()))
-                            //|| (prioritizedTask.getStartTime().isBefore(prioritizedTasks.get(i - 1).getEndTime()))
-            ) {
+                            || (task.getEndTime().equals(prioritizedTask.getStartTime())
+                            || task.getEndTime().isBefore(prioritizedTask.getStartTime()))
+                    )
+            ) */ {
                 isIntersection = true;
 //              break;
             }
