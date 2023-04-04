@@ -209,7 +209,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
                 expectedSortedTasks,
                 tasks.toArray(Task[]::new),
                 "не верная сортировка при пересечении");
-        Assertions.assertEquals(4,tasks.size(), "Не правильная обработка пересечения");
+        Assertions.assertEquals(4, tasks.size(), "Не правильная обработка пересечения");
     }
 
     @Test
@@ -248,6 +248,6 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
                 expectedSortedTasks,
                 tasks.toArray(Task[]::new),
                 "не верная сортировка при пересечении");
-        Assertions.assertEquals(4,tasks.size(), "Не правильная обработка пересечения");
+        Assertions.assertEquals(4, tasks.size(), "Не правильная обработка пересечения");
     }
 }

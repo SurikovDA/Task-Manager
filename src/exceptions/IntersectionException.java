@@ -1,10 +1,10 @@
 package exceptions;
 
-public class IntersectionException extends RuntimeException{
+public class IntersectionException extends RuntimeException {
 
-        public IntersectionException(String message) {
+    public IntersectionException(String message) {
 
-            super(message);
+        super(message);
 
-        }
+    }
 }

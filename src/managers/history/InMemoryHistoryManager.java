@@ -1,7 +1,6 @@
 package managers.history;
 
 
-
 import tasks.Task;
 
 import java.util.*;
@@ -87,7 +86,7 @@ class CustomLinkedList {
 
     //Собрать задачи в ArrayList
     public List<Task> getTasks() {
-        if(first != null) {
+        if (first != null) {
             List<Task> tasks = new ArrayList<>();
             Node element = first;
             while (element != null) {

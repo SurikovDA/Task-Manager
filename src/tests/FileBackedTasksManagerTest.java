@@ -120,6 +120,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         //Then
         Assertions.assertNull(secondManager.getHistory());
     }
+
     @Test
     public void test6_shouldDownloadFromFile_WithHistoryList() {
         //Given
@@ -135,7 +136,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         System.out.println(firstManager.findTaskById(test1.getId()));
         System.out.println(firstManager.findTaskById(test2.getId()));
         System.out.println(firstManager.findEpicById(epic.getId()));
-        System.out.println( firstManager.findSubtaskById(subtask1.getId()));
+        System.out.println(firstManager.findSubtaskById(subtask1.getId()));
         System.out.println(firstManager.findSubtaskById(subtask2.getId()));
 
 

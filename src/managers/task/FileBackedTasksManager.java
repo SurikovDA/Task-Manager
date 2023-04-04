@@ -200,7 +200,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     task.getDescriptionTask(),
                     startTime,
                     durationMinutes,
-                    ((Subtask)task).getEpic().getId()
+                    ((Subtask) task).getEpic().getId()
             );
         } else {
             result = String.format("%d,%s,%s,%s,%s,%s,%d",
@@ -235,7 +235,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         var name = values[2];
         var status = Status.valueOf(values[3]);
         var descriptionTask = values[4];
-
 
 
         if (TypeTask.valueOf(type).equals(TypeTask.TASK)) {
@@ -465,7 +464,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("\n");
 
         FileBackedTasksManager secondManager = new FileBackedTasksManager("src/resources/results.csv");
-         secondManager.loadFromFile("src/resources/results.csv");
+        secondManager.loadFromFile("src/resources/results.csv");
 
 
         System.out.println(secondManager.getAllSubtasks(7));
