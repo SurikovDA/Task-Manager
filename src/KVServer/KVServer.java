@@ -10,7 +10,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 public class KVServer {
-    public static final int PORT = 8078;
+    public static final int PORT = 8088;
     private final String apiToken;
     private final HttpServer server;
     private final Map<String, String> data = new HashMap<>();
@@ -23,9 +23,77 @@ public class KVServer {
         server.createContext("/load", this::load);
     }
 
-    private void load(HttpExchange h) {
-        // TODO Добавьте получение значения по ключу
+    public void stop() {
+
+        server.stop(0);
+        System.out.println("KVServer остановлен на " + PORT + " порту!");
+
     }
+
+    private void load(HttpExchange h) throws IOException {
+        // TODO Добавьте получение значения по ключу
+        try {
+
+            System.out.println("\n/load");
+
+            if (!hasAuth(h)) {
+
+                System.out.println("Запрос не авторизован, нужен параметр в query API_TOKEN со значением API ключа");
+
+                h.sendResponseHeaders(403, 0);
+
+                return;
+
+            }
+
+            if ("GET".equals(h.getRequestMethod())) {
+
+                var key = h.getRequestURI().getPath().substring("/load/".length());
+
+                if (key.isEmpty()) {
+
+                    System.out.println("Ключ(key) для загрузки пустой. Ключ(key) указывается в пути: /load/{key}");
+
+                    h.sendResponseHeaders(400, 0);
+
+                    return;
+
+                }
+
+                var value = data.get(key);
+
+                if (value.isEmpty()) {
+
+                    System.out.println("Значение(value) для загрузки пустое. Значение(value) указывается в теле запроса");
+
+                    h.sendResponseHeaders(400, 0);
+
+                    return;
+
+                }
+
+                sendText(h, value);
+
+                System.out.println("Значение для ключа " + key + " успешно обновлено!");
+
+                h.sendResponseHeaders(200, 0);
+
+            } else {
+
+                System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
+
+                h.sendResponseHeaders(405, 0);
+
+            }
+
+        } finally {
+
+            h.close();
+
+        }
+
+    }
+
 
     private void save(HttpExchange h) throws IOException {
         try {
