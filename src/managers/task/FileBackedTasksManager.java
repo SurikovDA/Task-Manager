@@ -145,6 +145,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return history;
     }
 
+    //Добавляет эпик в подзадачу по id эпику
+    protected void addEpicInSubtaskById(Subtask subtask, int idEpic) {
+        subtask.setEpic(epics.get(idEpic));
+    }
+
+    //Добавить в подзадачу эпик по id эпика, через сам эпик
+    protected void addSubtasksInEpic(Epic epic) {
+        for (Subtask subtask : epic.getSubtasks()) {
+            addEpicInSubtaskById(subtask, epic.getId());
+        }
+    }
+
     // Возвращает эпик
     public Epic getEpicById(int id) {
         return epics.get(id);
@@ -345,7 +357,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Произошла ошибка во время чтения файла.");
         }
     }
-
+}
+/*
     //Проверка
     public static void main(String[] args) {
         //Создание объекта менеджера:
@@ -452,6 +465,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
        /*Удаляем эпик с тремя подзадачами и убеждаемся,
                  что удалился как сам эпик, так и всего его подзадачи*/
         //manager.deleteEpicById(removal.getId());
+    /*
         System.out.println(manager.findTaskById(removal.getId()));
         System.out.println(manager.findSubtaskById(subtask1Epic1.getId()));
         System.out.println(manager.findSubtaskById(subtask2Epic1.getId()));
@@ -470,6 +484,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(secondManager.getAllSubtasks(7));
 
         /*Удаляем все задачи*/
+    /*
         secondManager.deleteAllTasks();
         System.out.println(secondManager.findTaskById(task1.getId()));
         System.out.println("\n");
@@ -481,5 +496,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 }
+*/
 
 

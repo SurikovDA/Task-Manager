@@ -11,6 +11,7 @@
 
 
         private Epic epic;
+        private int idEpic;
 
         public Subtask(String name, String descriptionTask) {
             super(name, descriptionTask);
@@ -46,9 +47,15 @@
 
         public void setEpic(Epic epic) {
             this.epic = epic;
+            this.idEpic = epic.getId();
+        }
+        public int getIdEpic() {
+            return idEpic;
         }
 
-
+        public void setIdEpic(int idEpic) {
+            this.idEpic = idEpic;
+        }
 
         @Override
         public boolean equals(Object o) {
