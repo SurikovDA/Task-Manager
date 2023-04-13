@@ -29,7 +29,7 @@ public class KVTaskClient {
             HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
             HttpRequest request = HttpRequest
                     .newBuilder()
-                    .uri(new URI(uri + "/save/" + key + "?API_KEY=" + API_KEY))
+                    .uri(new URI(uri + "/save/" + key + "?API_TOKEN=" + API_KEY))
                     .POST(body)
                     .build();
 
@@ -44,7 +44,7 @@ public class KVTaskClient {
         try {
             HttpRequest request = HttpRequest
                     .newBuilder()
-                    .uri(new URI(uri + "/load/" + key + "?API_KEY=" + API_KEY))
+                    .uri(new URI(uri + "/load/" + key + "?API_TOKEN=" + API_KEY))
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

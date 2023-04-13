@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 
 public class HTTPTaskServer extends FileBackedTasksManager {
     private static final int PORT = 8080;
-    private static final String PATH_FILE = "src/main/resources/history.csv";
+    private static final String PATH_FILE = "src/resources/history.csv";
 
     private HttpServer server;
     private final Gson gson = new GsonBuilder()
