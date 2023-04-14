@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.ManagerSaveException;
 import managers.history.HistoryManager;
 import managers.history.InMemoryHistoryManager;
 import managers.task.FileBackedTasksManager;
@@ -11,22 +12,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class Managers {
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static TaskManager getDefault(String uri) {
+        return new HTTPTaskManager(uri);
     }
 
     public TaskManager getHttpTaskManager(String uri)  {
-        try {
             return new HTTPTaskManager(uri);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    public TaskManager getFileBackedTasksManager(String path) {
+    public static TaskManager getFileBackedTasksManager(String path) {
         return new FileBackedTasksManager(path);
-
     }
 
     public static HistoryManager getDefaultHistory() {

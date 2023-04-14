@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 public class HTTPTaskManagerTest {
-    private final Managers managers = new Managers();
+    //private final Managers managers = new Managers();
     //private final KVServer kvServer = new KVServer();
 
 
@@ -42,7 +42,7 @@ public class HTTPTaskManagerTest {
         kvServer = new KVServer();
         kvServer.start();
         String uri = "http://localhost:8088";
-        taskManager = managers.getHttpTaskManager(uri);
+        taskManager = new HTTPTaskManager(uri);
         task = new Task("Test", "Test1");
         epic = new Epic("Eat", "soup");
         subtask = new Subtask("cook", "soup");

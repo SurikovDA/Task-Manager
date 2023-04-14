@@ -64,7 +64,7 @@ public class KVServer {
 
                 if (value.isEmpty()) {
 
-                    System.out.println("Значение(value) для загрузки пустое. Значение(value) указывается в теле запроса");
+                    System.out.println("Не найден сохраненный ключ " + value);
 
                     h.sendResponseHeaders(400, 0);
 
@@ -74,9 +74,7 @@ public class KVServer {
 
                 sendText(h, value);
 
-                System.out.println("Значение для ключа " + key + " успешно обновлено!");
-
-                h.sendResponseHeaders(200, 0);
+                System.out.println("Загрузка прошла успешно!");
 
             } else {
 

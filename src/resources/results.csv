@@ -1,8 +1,9 @@
 id,type,name,status,description,startTime,durationMinutes,epic
-1,TASK,Пройти теорию,NEW,null,null,0
 3,EPIC,Переезд,NEW,null,null,0
 7,EPIC,Важный эпик 2,NEW,null,null,0
 4,SUBTASK,Собрать коробки,NEW,null,null,0,3
 5,SUBTASK,Упаковать кошку,NEW,null,30.03.2023|11:40,120,3
 6,SUBTASK,Сказать слова прощания,NEW,null,null,0,3
 8,SUBTASK,Задача1,NEW,null,null,0,7
+
+6,7,3,8,4,5

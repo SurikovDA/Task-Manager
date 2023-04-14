@@ -1,5 +1,6 @@
 
 import managers.Managers;
+import managers.task.FileBackedTasksManager;
 import managers.task.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -14,7 +15,8 @@ public class Main {
     public static void main(String[] args) {
 
         //Создание объекта менеджера:
-        TaskManager manager = Managers.getDefault();
+        //TaskManager manager = Managers.getDefault(uri);
+        TaskManager manager = Managers.getFileBackedTasksManager("src/resources/results.csv");
         //Создаем две задачи
         System.out.println("Создание 2х задач: ");
         Task task1 = new Task("Пройти теорию");
@@ -107,13 +109,13 @@ public class Main {
 
         //Удаляем задачу и убеждаемся, что она удалилась
         manager.deleteTaskById(task2.getId());
-        System.out.println(manager.findTaskById(task2.getId()));
+       // System.out.println(manager.findTaskById(task2.getId()));
         System.out.println("\n");
 
         /*Удаляем эпик с тремя подзадачами и убеждаемся,
                  что удалился как сам эпик, так и всего его подзадачи*/
         //manager.deleteEpicById(removal.getId());
-        System.out.println(manager.findTaskById(removal.getId()));
+       // System.out.println(manager.findTaskById(removal.getId()));
         System.out.println(manager.findSubtaskById(subtask1Epic1.getId()));
         System.out.println(manager.findSubtaskById(subtask2Epic1.getId()));
         System.out.println("\n");
@@ -126,7 +128,7 @@ public class Main {
 
         //Удаляем все задачи
         manager.deleteAllTasks();
-        System.out.println(manager.findTaskById(task1.getId()));
+        //System.out.println(manager.findTaskById(task1.getId()));
         System.out.println("\n");
 
 

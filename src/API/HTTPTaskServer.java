@@ -42,7 +42,9 @@ public class HTTPTaskServer extends FileBackedTasksManager {
             server = HttpServer.create();
             server.bind(new InetSocketAddress(PORT), 0);
         } catch (IOException e) {
+            System.out.println("Не удалось создать сервер!");
             e.printStackTrace();
+            return;
         }
 
         //methods Tasks
@@ -83,7 +85,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     } else {
                         response = getAllTasks().toString();
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "POST" : {
@@ -99,7 +101,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         System.out.println("Успешно добавлена задача id = " + newTask.getId());
                         response = "Успешно добавлена задача id = " + newTask.getId();
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "DELETE" : {
@@ -112,7 +114,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         deleteAllTasks();
                         response = "Задачи успешно удалены";
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
             }
@@ -135,7 +137,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         int idSubtask = getIdValue(idInfo);
                         response = findSubtaskById(idSubtask).toString();
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "POST" : {
@@ -152,7 +154,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         System.out.println("Успешно добавлена подзадача id = " + newSubtask.getId());
                         response = "Успешно добавлена подзадача id = " + newSubtask.getId();
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "DELETE" : {
@@ -165,7 +167,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         deleteAllSubtasks();
                         response = "Подзадачи успешно удалены";
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
             }
@@ -187,7 +189,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         response = findEpicById(idEpic).toString();
                     } else
                         response = getAllEpics().toString();
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "POST" : {
@@ -204,7 +206,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         System.out.println("Успешно добавлен эпик id = " + newEpic.getId());
                         response = "Успешно добавлен эпик id = " + newEpic.getId();
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
                 case "DELETE" : {
@@ -217,7 +219,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         deleteAllEpics();
                         response = "Задачи успешно удалены";
                     }
-                    printResponse(response, httpExchange);
+                    sendResponse(response, httpExchange);
                     break;
                 }
             }
@@ -238,7 +240,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     //возращает подзадачи у эпика по id эпика
                     response = getAllSubtasks(idEpic).toString();
                 }
-                printResponse(response, httpExchange);
+                sendResponse(response, httpExchange);
             }
         });
     }
@@ -253,7 +255,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
             } else {
                 response = String.format("Запрос %s не обрабатывается", method);
             }
-            printResponse(response, httpExchange);
+            sendResponse(response, httpExchange);
         });
     }
 
@@ -267,7 +269,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
             } else {
                 response = String.format("Запрос %s не обрабатывается", method);
             }
-            printResponse(response, httpExchange);
+            sendResponse(response, httpExchange);
         });
     }
 
@@ -276,7 +278,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
         return Integer.parseInt(idInfoSplit[1]);
     }
 
-    private void printResponse(String response, HttpExchange httpExchange) {
+    private void sendResponse(String response, HttpExchange httpExchange) {
         try {
             if (response != null) {
                 httpExchange.sendResponseHeaders(200, 0);

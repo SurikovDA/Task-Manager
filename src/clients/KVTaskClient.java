@@ -1,5 +1,7 @@
 package clients;
 
+import exceptions.ManagerSaveException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,15 +14,19 @@ public class KVTaskClient {
     private final String uri;
     private final String API_KEY;
 
-    public KVTaskClient(String uri) throws IOException, InterruptedException, URISyntaxException {
-        this.uri = uri;
-        HttpRequest request = HttpRequest
-                .newBuilder()
-                .uri(new URI(this.uri + "/register"))
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        API_KEY = response.body();
+    public KVTaskClient(String uri)  {
+        try {
+            this.uri = uri;
+            HttpRequest request = HttpRequest
+                    .newBuilder()
+                    .uri(new URI(this.uri + "/register"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            API_KEY = response.body();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            throw new ManagerSaveException("Произошла ошибка во время создания запроса");
+        }
     }
 
     //сохраняет состояние менеджера задач через запрос
@@ -35,7 +41,8 @@ public class KVTaskClient {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new ManagerSaveException("Произошла ошибка во время сохранения менеджера задач через запрос.");
         }
     }
 
@@ -51,7 +58,8 @@ public class KVTaskClient {
             if (response.body() != null)
                 return response.body();
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new ManagerSaveException("Произошла ошибка во время загрузки менеджера задач через запрос.");
         }
         return null;
     }

@@ -2,6 +2,7 @@ package managers.task;
 import clients.KVTaskClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import exceptions.ManagerSaveException;
 import gson.deserialize.DurationJsonDeserializer;
 import gson.deserialize.EpicJsonDeserializer;
 import gson.deserialize.LocalDateTimeJsonDeserializer;
@@ -22,9 +23,9 @@ import java.time.LocalDateTime;
 public class HTTPTaskManager extends FileBackedTasksManager {
     private final KVTaskClient kvTaskClient;
 
-    public HTTPTaskManager(String path) throws URISyntaxException, IOException, InterruptedException {
-        super(path);
-        this.kvTaskClient = new KVTaskClient(path);
+    public HTTPTaskManager(String path)  {
+            super(path);
+            this.kvTaskClient = new KVTaskClient(path);
     }
 
     //Сохраняет задачи на сервер
