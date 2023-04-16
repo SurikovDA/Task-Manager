@@ -2,6 +2,12 @@ package tests;
 
 import clients.HTTPTaskClient;
 import API.HTTPTaskServer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import gson.deserialize.DurationJsonDeserializer;
+import gson.deserialize.EpicJsonDeserializer;
+import gson.deserialize.LocalDateTimeJsonDeserializer;
+import gson.deserialize.SubtaskJsonDeserializer;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -10,7 +16,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class HTTPTaskServerTest {
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Subtask.class, new SubtaskJsonDeserializer())
+            .registerTypeAdapter(Epic.class, new EpicJsonDeserializer())
+            .registerTypeAdapter(Duration.class, new DurationJsonDeserializer())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonDeserializer())
+            .create();
     private final String uri = "http://localhost:8080/tasks";
     private final HTTPTaskClient client = new HTTPTaskClient(uri);
 
@@ -51,7 +66,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateTask(task1);
         client.addOrUpdateTask(task2);
         //ожидание
-        String expectedTasks = server.getAllTasks().toString();
+        String expectedTasks = gson.toJson(server.getAllTasks());
         //реальность
         String actualTasks = client.getTasksToString();
 
@@ -63,7 +78,7 @@ public class HTTPTaskServerTest {
         //добавляем на сервер задачи через запрос клиента
         client.addOrUpdateTask(task1);
         //ожидание
-        String expectedTask = server.findTaskById(1).toString();
+        String expectedTask = gson.toJson(server.findTaskById(1));
         //реальность
         String actualTasks = client.getTaskByIdToString(1);
 
@@ -117,7 +132,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateEpic(epic1);
         client.addOrUpdateSubtask(subtask1, server.findEpicById(1));
 
-        String expectedSubtask = server.findSubtaskById(2).toString();
+        String expectedSubtask = gson.toJson(server.findSubtaskById(2));
         String actualSubtask = client.getSubtaskByIdToString(2);
 
         Assertions.assertEquals(expectedSubtask, actualSubtask, "Ожидалась другая подзадача");
@@ -136,7 +151,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateSubtask(updateSubtask, server.findEpicById(2));
 
         updateSubtask.setEpic(server.findEpicById(2));
-        String expectedSubtask = updateSubtask.toString();
+        String expectedSubtask = gson.toJson(updateSubtask);
         String actualSubtask = server.findSubtaskById(3).toString();
         Assertions.assertEquals(expectedSubtask, actualSubtask, "Подзадача не обновлена");
     }
@@ -170,7 +185,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateEpic(epic1);
         client.addOrUpdateEpic(epic1);
 
-        String expectedEpics = server.getAllEpics().toString();
+        String expectedEpics = gson.toJson(server.getAllEpics());
         String actualEpics = client.getEpicsToString();
 
         Assertions.assertEquals(expectedEpics, actualEpics, "Ожидались одинаковые эпики");
@@ -180,7 +195,7 @@ public class HTTPTaskServerTest {
     void test11_shouldGetEpicByIdToString() {
         client.addOrUpdateEpic(epic1);
 
-        String expectedEpics = server.getEpicById(1).toString();
+        String expectedEpics = gson.toJson(server.getEpicById(1));
         String actualEpics = client.getEpicByIdToString(1);
 
         Assertions.assertEquals(expectedEpics, actualEpics, "Различаются эпики");
@@ -241,7 +256,7 @@ public class HTTPTaskServerTest {
 
         server.findTaskById(1);
 
-        String expectedHistory = server.getHistory().toString();
+        String expectedHistory = gson.toJson(server.getHistory());
         String actualHistory = client.getHistoryToString();
 
         Assertions.assertEquals(expectedHistory, actualHistory);
@@ -258,7 +273,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateTask(task1);
         client.addOrUpdateTask(task2);
 
-        String expectedTasks = server.getPrioritizedTasks().toString();
+        String expectedTasks = gson.toJson(server.getPrioritizedTasks());
         String actualTasks = client.getPrioritizedTasksToString();
 
         Assertions.assertEquals(expectedTasks, actualTasks);

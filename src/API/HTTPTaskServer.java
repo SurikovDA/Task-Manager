@@ -79,9 +79,9 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     //if id exists
                     if (idInfo != null) {
                         int idTask = getIdValue(idInfo);
-                        response = findTaskById(idTask).toString();
+                        response = gson.toJson(findTaskById(idTask));
                     } else {
-                        response = getAllTasks().toString();
+                        response = gson.toJson(getAllTasks());
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -93,11 +93,11 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     if (tasks.containsKey(newTask.getId())) {
                         updateTask(newTask.getId(), newTask);
                         System.out.println("Успешно обновлена задача id = " + newTask.getId());
-                        response = "Успешно обновлена задача id = " + newTask.getId();
+                        response = gson.toJson(findTaskById(newTask.getId()));
                     } else {
                         createNewTask(newTask);
                         System.out.println("Успешно добавлена задача id = " + newTask.getId());
-                        response = "Успешно добавлена задача id = " + newTask.getId();
+                        response = gson.toJson(findTaskById(newTask.getId()));
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -107,10 +107,10 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     if (idInfo != null) {
                         int idTask = getIdValue(idInfo);
                         deleteTaskById(idTask);
-                        response = String.format("Задача под id = %d успешно удалена", idTask);
+                        response = gson.toJson(getAllTasks());
                     } else {
                         deleteAllTasks();
-                        response = "Задачи успешно удалены";
+                        response = gson.toJson(getAllTasks());
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -133,7 +133,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     //if id exists
                     if (idInfo != null) {
                         int idSubtask = getIdValue(idInfo);
-                        response = findSubtaskById(idSubtask).toString();
+                        response = gson.toJson(findSubtaskById(idSubtask));
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -146,11 +146,11 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     if (subtasks.containsKey(newSubtask.getId())) {
                         updateSubtaskById(newSubtask.getId(), newSubtask);
                         System.out.println("Успешно обновлена подзадача id = " + newSubtask.getId());
-                        response = "Успешно обновлена подзадача id = " + newSubtask.getId();
+                        response = gson.toJson(findSubtaskById(newSubtask.getId()));
                     } else {
                         createNewSubtask(newSubtask, newSubtask.getEpic());
                         System.out.println("Успешно добавлена подзадача id = " + newSubtask.getId());
-                        response = "Успешно добавлена подзадача id = " + newSubtask.getId();
+                        response = gson.toJson(findSubtaskById(newSubtask.getId()));
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -160,10 +160,10 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     if (idInfo != null) {
                         int idSubtask = getIdValue(idInfo);
                         deleteSubtaskById(idSubtask);
-                        response = String.format("Подзадача под id = %d успешно удалена", idSubtask);
+                        response = gson.toJson(getAllSubtasks());
                     } else {
                         deleteAllSubtasks();
-                        response = "Подзадачи успешно удалены";
+                        response = gson.toJson(getAllSubtasks());
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -184,9 +184,9 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     //if id exists
                     if (idInfo != null) {
                         int idEpic = getIdValue(idInfo);
-                        response = findEpicById(idEpic).toString();
+                        response = gson.toJson(findEpicById(idEpic));
                     } else
-                        response = getAllEpics().toString();
+                        response = gson.toJson(getAllEpics());
                     printResponse(response, httpExchange);
                     break;
                 }
@@ -198,11 +198,11 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                         addSubtasksInEpic(newEpic);
                         updateEpicById(newEpic.getId(), newEpic);
                         System.out.println("Успешно обновлен эпик id = " + newEpic.getId());
-                        response = "Успешно обновлен эпик id = " + newEpic.getId();
+                        response = gson.toJson(newEpic);
                     } else {
                         createNewEpic(newEpic);
                         System.out.println("Успешно добавлен эпик id = " + newEpic.getId());
-                        response = "Успешно добавлен эпик id = " + newEpic.getId();
+                        response = gson.toJson(getEpicById(newEpic.getId()));
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -212,10 +212,10 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                     if (idInfo != null) {
                         int idEpic = getIdValue(idInfo);
                         deleteEpicById(idEpic);
-                        response = String.format("Задача под id = %d успешно удалена", idEpic);
+                        response = gson.toJson(getAllEpics());
                     } else {
                         deleteAllEpics();
-                        response = "Задачи успешно удалены";
+                        response = gson.toJson(getAllEpics());
                     }
                     printResponse(response, httpExchange);
                     break;
@@ -236,7 +236,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                 if (idInfo != null) {
                     int idEpic = getIdValue(idInfo);
                     //возращает подзадачи у эпика по id эпика
-                    response = getAllSubtasksById(idEpic).toString();
+                    response = gson.toJson(getAllSubtasksById(idEpic));
                 }
                 printResponse(response, httpExchange);
             }
@@ -249,9 +249,9 @@ public class HTTPTaskServer extends FileBackedTasksManager {
             String method = httpExchange.getRequestMethod();
             String response = null;
             if (method.equals("GET")) {
-                response = getHistory().toString();
+                response = gson.toJson(getHistory());
             } else {
-                response = String.format("Запрос %s не обрабатывается", method);
+                response = gson.toJson(String.format("Запрос %s не обрабатывается", method));
             }
             printResponse(response, httpExchange);
         });
@@ -263,9 +263,9 @@ public class HTTPTaskServer extends FileBackedTasksManager {
             String method = httpExchange.getRequestMethod();
             String response = null;
             if (method.equals("GET")) {
-                response = getPrioritizedTasks().toString();
+                response = gson.toJson(getPrioritizedTasks());
             } else {
-                response = String.format("Запрос %s не обрабатывается", method);
+                response = gson.toJson(String.format("Запрос %s не обрабатывается", method));
             }
             printResponse(response, httpExchange);
         });
