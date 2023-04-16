@@ -31,7 +31,6 @@ public class KVServer {
     }
 
     private void load(HttpExchange h) throws IOException {
-        // TODO Добавьте получение значения по ключу
         try {
 
             System.out.println("\n/load");
@@ -61,29 +60,13 @@ public class KVServer {
                 }
 
                 var value = data.get(key);
-
-                if (value.isEmpty()) {
-
-                    System.out.println("Значение(value) для загрузки пустое. Значение(value) указывается в теле запроса");
-
-                    h.sendResponseHeaders(400, 0);
-
-                    return;
-
-                }
-
+                System.out.println("Значение для ключа " + key + " получено!");
                 sendText(h, value);
-
                 System.out.println("Значение для ключа " + key + " успешно обновлено!");
-
                 h.sendResponseHeaders(200, 0);
-
             } else {
-
                 System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
-
                 h.sendResponseHeaders(405, 0);
-
             }
 
         } finally {
