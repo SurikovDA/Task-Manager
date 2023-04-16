@@ -1,7 +1,9 @@
 package managers.task;
+
 import clients.KVTaskClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import gson.deserialize.DurationJsonDeserializer;
 import gson.deserialize.EpicJsonDeserializer;
 import gson.deserialize.LocalDateTimeJsonDeserializer;
@@ -15,15 +17,22 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public class HTTPTaskManager extends FileBackedTasksManager {
+    Gson gson;
     private final KVTaskClient kvTaskClient;
 
     public HTTPTaskManager(String path) throws URISyntaxException, IOException, InterruptedException {
         super(path);
+        gson = new Gson();
         this.kvTaskClient = new KVTaskClient(path);
     }
 
@@ -32,27 +41,57 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     protected void save() {
         for (Task task : tasks.values()) {
             String json = getJsonString(task);
-            kvTaskClient.put(String.valueOf(task.getId()), json);
+            kvTaskClient.put("task", json);
         }
 
         for (Subtask subtask : subtasks.values()) {
             String json = getJsonString(subtask);
-            kvTaskClient.put(String.valueOf(subtask.getId()), json);
+            kvTaskClient.put("subtask", json);
         }
 
         for (Epic epic : epics.values()) {
             String json = getJsonString(epic);
-            kvTaskClient.put(String.valueOf(epic.getId()), json);
+            kvTaskClient.put("epic", json);
+        }
+        List<Integer> idList = Stream.of(
+                        this.getAllTasks()
+                        , this.getAllEpics()
+                        , this.getAllSubtasks())
+                .flatMap(Collection::stream)
+                .map(Task::getId)
+                .collect(Collectors.toList());
+        kvTaskClient.put("idList", gson.toJson(idList));
+    }
+
+    //Возращает Задачу из сервера
+    public void load(String key) {
+        String type;
+        String json = kvTaskClient.load(key);
+        if (json != null) {
+            if (key.equals("task")) {
+                type = "Task";
+                Task task = readJsonString(json, type);
+                tasks.put(task.getId(), task);
+            } else if (key.equals("subtask")) {
+                type = "Subtask";
+                Task subtask = readJsonString(json, type);
+                ((Subtask) subtask).getEpic().getSubtasks().add((Subtask) subtask);
+                subtasks.put(subtask.getId(), (Subtask) subtask);
+            } else if (key.equals("epic")) {
+                type = "Epic";
+                Task epic = readJsonString(json, type);
+                epics.put(epic.getId(), (Epic) epic);
+            } else {
+                System.out.println("Ошибка! Не правильный запрос!");
+            }
         }
     }
 
     //Возращает Задачу из сервера
-    public Task load(String key) {
-        String json = kvTaskClient.load(key);
-        if (json != null)
-            return readJsonString(json, getSimpleNameTask(Integer.parseInt(key)));
-        else
-            return null;
+    public void loadAll() {
+        this.load("task");
+         this.load("epic");
+         this.load("subtask");
     }
 
     //Сериализация Task объекта в Json
@@ -82,18 +121,18 @@ public class HTTPTaskManager extends FileBackedTasksManager {
                 .create();
         if (simpleNameTask.equals("Task")) {
             return gson.fromJson(json, Task.class);
-        } else if (simpleNameTask.equals("Subtask")){
+        } else if (simpleNameTask.equals("Subtask")) {
             Subtask subtask = gson.fromJson(json, Subtask.class);
             addEpicInSubtaskById(subtask, subtask.getIdEpic());
             return subtask;
-        } else{
+        } else {
             Epic epic = gson.fromJson(json, Epic.class);
             addSubtasksInEpic(epic);
             return epic;
         }
     }
 
-    private String getSimpleNameTask(int id){
+    private String getSimpleNameTask(int id) {
         if (tasks.containsKey(id))
             return tasks.get(id).getClass().getSimpleName();
         else if (subtasks.containsKey(id))

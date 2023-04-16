@@ -69,10 +69,10 @@ public class Main {
         System.out.println("Получение списка всех подзадач определенного эпика: ");
 
         System.out.println("Список всех подзадач " + manager.findEpicById(removal.getId()) + ": ");
-        System.out.println(manager.getAllSubtasks(removal.getId()));
+        System.out.println(manager.getAllSubtasksById(removal.getId()));
 
         System.out.println("Список всех подзадач " + manager.findEpicById(epic2.getId()) + ": ");
-        System.out.println(manager.getAllSubtasks(epic2.getId()));
+        System.out.println(manager.getAllSubtasksById(epic2.getId()));
         System.out.println("\n");
 
         //Запрашиваем созданные задачи и проверяем историю

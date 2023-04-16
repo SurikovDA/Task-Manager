@@ -1,6 +1,5 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
 import clients.HTTPTaskClient;
 import API.HTTPTaskServer;
 import tasks.Epic;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 public class HTTPTaskServerTest {
     private final String uri = "http://localhost:8080/tasks";
@@ -232,7 +229,7 @@ public class HTTPTaskServerTest {
         client.addOrUpdateSubtask(subtask1, server.getEpicById(1));
         client.addOrUpdateSubtask(subtask2, server.getEpicById(1));
 
-        String expectedSubtasks = server.getAllSubtasks(1).toString();
+        String expectedSubtasks = server.getAllSubtasksById(1).toString();
         String actualSubtasks = client.getEpicSubTasksToString(1);
 
         Assertions.assertEquals(expectedSubtasks, actualSubtasks);

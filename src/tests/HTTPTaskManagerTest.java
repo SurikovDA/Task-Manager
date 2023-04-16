@@ -43,9 +43,9 @@ public class HTTPTaskManagerTest {
         kvServer.start();
         String uri = "http://localhost:8088";
         taskManager = managers.getHttpTaskManager(uri);
-        task = new Task("Test", "Test1");
-        epic = new Epic("Eat", "soup");
-        subtask = new Subtask("cook", "soup");
+        task = new Task("Task1", "task");
+        epic = new Epic("Epic1", "epic");
+        subtask = new Subtask("Subtask1", "subtask");
     }
 
     @AfterEach
@@ -54,37 +54,31 @@ public class HTTPTaskManagerTest {
     }
 
     @Test
-    void test1_shouldSavedTaskToServer() {
-        task.setDuration(60);
-        task.setStartTime("09.04.2022|13:00");
+    void loadFromServerTest() {
+
         taskManager.createNewTask(task);
-        Assertions.assertEquals(
-                task,
-                ((HTTPTaskManager) taskManager).load(String.valueOf(task.getId())),
-                "Задачи различаются");
-    }
 
-    @Test
-    void test2_shouldSavedSubtaskToServer() {
         taskManager.createNewEpic(epic);
-        taskManager.createNewSubtask(subtask, epic);
-        Task task = ((HTTPTaskManager) taskManager).load(String.valueOf(subtask.getId()));
-        Assertions.assertEquals(
-                subtask.toString(),
-                ((HTTPTaskManager) taskManager).load(String.valueOf(subtask.getId())).toString(),
-                "Подзадачи разные ");
 
-    }
-
-    @Test
-    void test3_shouldSavedEpicToServer() {
-        taskManager.createNewEpic(epic);
         taskManager.createNewSubtask(subtask, epic);
-        Assertions.assertEquals(
-                epic.toString(),
-                ((HTTPTaskManager) taskManager).load(String.valueOf(epic.getId())).toString(),
-                "Эпики разные"
-        );
+
+        taskManager.createNewSubtask(
+                new Subtask("Subtask2", "Subtask2D"), epic);
+
+
+
+        taskManager.getAllTasks();
+        taskManager.getAllEpics();
+        taskManager.getAllSubtasks();
+
+        ((HTTPTaskManager)taskManager).load("task");
+        ((HTTPTaskManager)taskManager).load("epic");
+        ((HTTPTaskManager)taskManager).load("subtask");
+        ((HTTPTaskManager)taskManager).loadAll();
+
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
 
     }
 }

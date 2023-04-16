@@ -60,10 +60,15 @@ public class InMemoryTaskManager implements TaskManager, Comparator<Task> {
     public ArrayList<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
+    //Получение всех подзадач
+    @Override
+    public ArrayList<Subtask> getAllSubtasks() {
+        return new ArrayList<>(subtasks.values());
+    }
 
     //Получение списка всех подзадач определённого эпика.
     @Override
-    public ArrayList<Task> getAllSubtasks(int idEpic) {
+    public ArrayList<Subtask> getAllSubtasksById(int idEpic) {
         return new ArrayList<>(epics.get(idEpic).getSubtasks());
     }
 

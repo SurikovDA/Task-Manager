@@ -236,7 +236,7 @@ public class HTTPTaskServer extends FileBackedTasksManager {
                 if (idInfo != null) {
                     int idEpic = getIdValue(idInfo);
                     //возращает подзадачи у эпика по id эпика
-                    response = getAllSubtasks(idEpic).toString();
+                    response = getAllSubtasksById(idEpic).toString();
                 }
                 printResponse(response, httpExchange);
             }

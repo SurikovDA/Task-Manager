@@ -4,6 +4,7 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,10 +19,11 @@ public interface TaskManager {
 
     //Получение списка всех эпиков.
     List<Epic> getAllEpics();
-
+    //Получение всех подзадач
+    ArrayList<Subtask> getAllSubtasks();
 
     //Получение списка всех подзадач определённого эпика.
-    List<Task> getAllSubtasks(int idEpic);
+    List<Subtask> getAllSubtasksById(int idEpic);
 
 
     //Получение задачи любого типа по идентификатору.

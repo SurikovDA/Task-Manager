@@ -24,20 +24,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public ArrayList<Task> getAllTasks() {
         var allTasks = super.getAllTasks();
-        save();
+        //save();
         return allTasks;
     }
 
     @Override
     public ArrayList<Epic> getAllEpics() {
         var allEpics = super.getAllEpics();
-        save();
+        //save();
         return allEpics;
+    }
+    @Override
+    public ArrayList<Subtask> getAllSubtasks() {
+        var allSubtasks = super.getAllSubtasks();
+        //save();
+        return allSubtasks;
     }
 
     @Override
-    public ArrayList<Task> getAllSubtasks(int idEpic) {
-        var allSubtasks = super.getAllSubtasks(idEpic);
+    public ArrayList<Subtask> getAllSubtasksById(int idEpic) {
+        var allSubtasks = super.getAllSubtasksById(idEpic);
         save();
         return allSubtasks;
     }

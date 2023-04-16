@@ -98,7 +98,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.createNewSubtask(subtask, epic);
 
         Subtask[] expectedAllSubtasks = new Subtask[]{subtask};
-        Subtask[] allSubtasks = taskManager.getAllSubtasks(epic.getId()).toArray(Subtask[]::new);
+        Subtask[] allSubtasks = taskManager.getAllSubtasksById(epic.getId()).toArray(Subtask[]::new);
 
         Assertions.assertArrayEquals(expectedAllSubtasks, allSubtasks, "Массивы не равны");
     }
@@ -113,7 +113,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         //проверка на размер словаря
         Assertions.assertEquals(
                 expectedSize,
-                taskManager.getAllSubtasks(epic.getId()).size(),
+                taskManager.getAllSubtasksById(epic.getId()).size(),
                 "Создался дубликат подзадачи"
         );
     }

@@ -83,7 +83,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         ((FileBackedTasksManager) secondManager).loadFromFile(path);
 
         //Then
-        Assertions.assertTrue(secondManager.getAllSubtasks(epic.getId()).isEmpty());
+        Assertions.assertTrue(secondManager.getAllSubtasksById(epic.getId()).isEmpty());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
 
         //Then
         //проверим на количество подзадач у скопированного эпика в новом менеджере
-        Assertions.assertEquals(3, secondManager.getAllSubtasks(epic.getId()).size());
+        Assertions.assertEquals(3, secondManager.getAllSubtasksById(epic.getId()).size());
     }
 
 
