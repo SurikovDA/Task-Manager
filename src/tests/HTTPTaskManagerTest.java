@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HTTPTaskManagerTest {
     private final Managers managers = new Managers();
@@ -26,16 +27,6 @@ public class HTTPTaskManagerTest {
     private Epic epic;
 
     protected KVServer kvServer;
-    /*
-    @BeforeEach
-    public void loadInitialConditions() throws IOException {
-
-        kvServer = new KVServer();
-        kvServer.start();
-
-       Managers manager = new Managers();
-
-    }*/
 
     @BeforeEach
     void start()throws IOException {
@@ -62,23 +53,13 @@ public class HTTPTaskManagerTest {
 
         taskManager.createNewSubtask(subtask, epic);
 
-        taskManager.createNewSubtask(
-                new Subtask("Subtask2", "Subtask2D"), epic);
-
-
-
         taskManager.getAllTasks();
         taskManager.getAllEpics();
         taskManager.getAllSubtasks();
 
-        ((HTTPTaskManager)taskManager).load("task");
-        ((HTTPTaskManager)taskManager).load("epic");
-        ((HTTPTaskManager)taskManager).load("subtask");
-        ((HTTPTaskManager)taskManager).loadAll();
-
-        System.out.println(taskManager.getAllTasks());
-        System.out.println(taskManager.getAllEpics());
-        System.out.println(taskManager.getAllSubtasks());
-
+        System.out.println(((HTTPTaskManager)taskManager).loadAll());
+        List<Task>allTasks = ((HTTPTaskManager)taskManager).loadAll();
+        int expectedSize = 3;
+        Assertions.assertEquals(expectedSize, allTasks.size(),"Не верное количество задач");
     }
 }

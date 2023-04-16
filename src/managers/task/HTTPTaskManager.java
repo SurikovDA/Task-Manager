@@ -64,34 +64,38 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     }
 
     //Возращает Задачу из сервера
-    public void load(String key) {
+    public Task load(String key) {
         String type;
         String json = kvTaskClient.load(key);
         if (json != null) {
             if (key.equals("task")) {
                 type = "Task";
                 Task task = readJsonString(json, type);
-                tasks.put(task.getId(), task);
+                return task;
             } else if (key.equals("subtask")) {
                 type = "Subtask";
                 Task subtask = readJsonString(json, type);
-                ((Subtask) subtask).getEpic().getSubtasks().add((Subtask) subtask);
-                subtasks.put(subtask.getId(), (Subtask) subtask);
+                return subtask;
             } else if (key.equals("epic")) {
                 type = "Epic";
                 Task epic = readJsonString(json, type);
-                epics.put(epic.getId(), (Epic) epic);
+                return epic;
             } else {
                 System.out.println("Ошибка! Не правильный запрос!");
             }
-        }
+        } return null;
     }
 
-    //Возращает Задачу из сервера
-    public void loadAll() {
-        this.load("task");
-         this.load("epic");
-         this.load("subtask");
+    //Возращает Задачи из сервера
+    public List<Task> loadAll() {
+       Task task = this.load("task");
+       Task epic =  this.load("epic");
+       Task subtask =  this.load("subtask");
+       List<Task>allTasks = new ArrayList<>();
+       allTasks.add(task);
+       allTasks.add(epic);
+       allTasks.add(subtask);
+       return allTasks;
     }
 
     //Сериализация Task объекта в Json
@@ -140,5 +144,4 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         else
             return epics.get(id).getClass().getSimpleName();
     }
-
 }
